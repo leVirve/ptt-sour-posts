@@ -1,8 +1,21 @@
-import json
-import itertools
-
-from pymongo import MongoClient
 import jieba
+from pymongo import MongoClient
+from gensim.models import word2vec
+
+
+class Word2VecModel():
+
+    name = 'output/%s-%d.model.bin'
+
+    def __init__(self, filename, corpus_file, encode_size=250):
+        self.filename = filename
+        self.corpus_file = corpus_file
+        self.encode_size = encode_size
+
+    def train(self):
+        sentences = word2vec.Text8Corpus(self.corpus_file)
+        model = word2vec.Word2Vec(sentences, size=self.encode_size, workers=8)
+        model.save(self.name % (self.filename, self.encode_size))
 
 
 class Corpus():
@@ -53,17 +66,18 @@ class PttDatabase():
 if __name__ == '__main__':
 
     board = 'baseball'
-    corpus_output = f'data/corpus_{board}.txt'
+    corpus_file = f'output/corpus_{board}.txt'
 
-    tokenizer = Tokenizer()
     db = PttDatabase(board)
 
-    corpus = Corpus(corpus_output)
-
+    corpus = Corpus(corpus_file)
+    tokenizer = Tokenizer()
     for i, post in enumerate(db.posts()):
         corpus.write_words(tokenizer.segment(post['content']))
         for comment in post['comments']:
             corpus.write_words(tokenizer.segment(comment['content']))
         print(f'{board}, 處理第 {i} 篇文章，共 %d 篇' % len(db))
-
     corpus.close()
+
+    model = Word2VecModel(board, corpus_file, encode_size=250)
+    model.train()
