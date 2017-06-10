@@ -73,7 +73,7 @@ def create_corpus(board, corpus_file):
         corpus.write_words(tokenizer.segment(post['content']))
         for comment in post['comments']:
             corpus.write_words(tokenizer.segment(comment['content']))
-        print(f'{board}, 處理第 {i} 篇文章，共 %d 篇' % len(db))
+        print('%s, 處理第 %d 篇文章，共 %d 篇' % (board, i, len(db)))
     corpus.close()
 
 
@@ -83,7 +83,7 @@ def create_corpus(board, corpus_file):
 @click.option('--encode_size', default=250, help='word2vec 向量長度')
 @click.option('--text', default='', help='測試字串')
 def main(board, train, encode_size, text):
-    corpus_file = f'output/corpus_{board}.txt'
+    corpus_file = 'output/corpus_%d.txt' % board
     w2v = Word2VecModel(board)
 
     if train:

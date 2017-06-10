@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <h1><a href="/">☠️</a> PTT 詞彙向量</h1>
+
+    <hr>
+
+    <form action="/word2vec" method="post">
+        {% if classifier_option %}
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <select class="form-control" id="method" name="method_name">
+                    <option>SVM</option>
+                    <option>Naive Bayesian</option>
+                </select>
+            </div>
+        </div>
+        {% endif %}
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <select class="form-control" id="board" name="board_name">
+                    <option>Movie</option>
+                    <option>LoL</option>
+                    <option>Baseball</option>
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control form-control-lg" name="keyword" placeholder="詞彙" value="{{ request.form['keyword'] }}">
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary">查詢</button>
+            </div>
+        </div>
+    </form>
+
+    {% if show %}
+    <div class="container">
+        <h2>查詢的關鍵字<span style="color:cornflowerblue">@看板{{ board_name }}</span>: {{ keyword }}</h2>
+        <hr>
+        {% if results %}
+        <table class="table table-striped" style="font-size: 1.5em">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>#</th>
+                    <th>相關字詞</th>
+                    <th>相關係數</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for word, score in results %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ word }}</td>
+                    <td>{{ score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

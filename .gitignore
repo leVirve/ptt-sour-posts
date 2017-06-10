@@ -1,4 +1,6 @@
 dict.txt.big
 stop_words.txt
 
+*.pyc
+data/
 output/
