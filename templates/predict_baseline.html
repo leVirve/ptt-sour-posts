@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+   <h1><a href="/">☠️</a> PTT 酸句分析</h1>
+
+    <hr>
+
+    <form action="/predict_baseline" method="post">
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <select class="form-control" id="method" name="method_name">
+                    <option>SVM</option>
+                    <option>Naive Bayesian</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <select class="form-control" id="board" name="board_name">
+                    <option>Movie</option>
+                    <option>LoL</option>
+                    <option>Baseball</option>
+                </select>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control form-control-lg" name="keyword" placeholder="詞彙 / PTT 文章網址" value="{{ request.form['keyword'] }}">
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary">查詢</button>
+            </div>
+        </div>
+    </form>
+
+    {% if show %}
+    <div id="content" class="jumbotron">
+        <div class="container">
+            <h2>查詢的關鍵字<span style="color:cornflowerblue">@看板{{ board_name }}</span>: {{ keyword }}</h2>
+            <hr>
+            {% if result %}
+                <h2 style="color:blueviolet">{{ result }}</h2>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
