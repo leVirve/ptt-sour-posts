@@ -2,6 +2,14 @@
 
 No sour posts anymore :crystal_ball:
 
+- Our UI for word2vec
+
+    ![](doc/w2v.png)
+
+- Our UI for classifier
+
+    ![](doc/cl.png)
+
 ## Dependency
 
 - MongoDB
